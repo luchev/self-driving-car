@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import {Canvas} from './canvas';
 import {Car} from './car';
+import {Game} from './game';
 
 window.global = window;
 window.Buffer = window.Buffer || require( 'buffer' ).Buffer;
@@ -55,24 +56,21 @@ trackImages.push( image );
 
 function main() {
     let canvas = new Canvas( 'canvas', carImages, trackImages );
-    let car = new Car( 0 );
-    canvas.drawTrack( 0 );
-    canvas.drawCar( car );
-
-    
+    let game = new Game(canvas);
+    game.run();
 }
 
-document.body.onkeydown = function ( ev ) {
-    // ev.preventDefault(); // cancels default actions
-    console.log(ev.key);
-    // return false; // cancels this function as well as default actions
-}
+// document.body.onkeydown = function ( ev ) {
+//     // ev.preventDefault(); // cancels default actions
+//     console.log(ev.key);
+//     // return false; // cancels this function as well as default actions
+// }
 
-document.body.addEventListener( "keydown", function ( ev ) {
-    // ev.preventDefault() // cancels default actions
-    console.log(ev.key);
-    // return false; // cancels this function only
-} );
+// document.body.addEventListener( "keydown", function ( ev ) {
+//     // ev.preventDefault() // cancels default actions
+//     console.log(ev.key);
+//     // return false; // cancels this function only
+// } );
 
 setTimeout(() => {
     main();
