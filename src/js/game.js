@@ -13,8 +13,7 @@ export class Game {
 
     update( progress ) {
         for ( let car of this.cars ) {
-            car.turn();
-            car.move( progress );
+            car.tick(progress);
         }
     }
 

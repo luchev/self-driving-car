@@ -4,6 +4,7 @@ export class Car {
         this.y = 0;
         this.rotation = Math.PI;
         this.maxSpeed = 10;
+        this.maxSpeedReverse = -2;
         this.speed = 0;
         this.imageId = imageId;
 
@@ -24,6 +25,12 @@ export class Car {
         } );
     }
 
+    tick(progress) {
+        this.turn();
+        this.accelerate();
+        this.move(progress);
+    }
+
     move(progress) {
         progress /= 16;
         this.x += progress * this.speed * Math.cos(this.rotation);
@@ -33,12 +40,20 @@ export class Car {
     turn() {
         if ( this.pressedKeys.has( this.keys['left'] ) ) {
             this.rotation -= 0.1;
-        } else if ( this.pressedKeys.has( this.keys['right'] ) ) {
+        }
+        if ( this.pressedKeys.has( this.keys['right'] ) ) {
             this.rotation += 0.1;
-        } else if ( this.pressedKeys.has( this.keys['forward'] ) ) {
+        }
+    }
+
+    accelerate() {
+        if ( this.pressedKeys.has( this.keys['forward'] ) ) {
             this.speed = Math.min( this.speed + 0.1, this.maxSpeed );
-        } else if ( this.pressedKeys.has( this.keys['back'] ) ) {
-            this.speed = Math.max(this.speed -0.1, 0);
+        } else {
+            this.speed = Math.max( this.speed - 0.05, 0 );
+        }
+        if ( this.pressedKeys.has( this.keys['back'] ) ) {
+            this.speed = Math.max( this.speed - 0.1, this.maxSpeedReverse );
         }
     }
 }
