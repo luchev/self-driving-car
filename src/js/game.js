@@ -1,11 +1,13 @@
 import {Car} from './car';
 import {Line, Point} from './geometry';
+import {Map} from './map';
 
 export class Game {
-    constructor( canvas ) {
+    constructor( canvas, map ) {
         this.lastRender = 0;
         this.cars = [new Car()];
         this.canvas = canvas;
+        this.map = map;
     }
 
     run() {
@@ -20,7 +22,7 @@ export class Game {
 
     draw() {
         this.canvas.clear();
-        this.canvas.drawTrack( 0 );
+        this.canvas.drawMap();
         for ( let car of this.cars ) {
             let sensors = car.getSensors();
             for (let sensor of sensors) {

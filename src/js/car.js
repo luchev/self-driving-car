@@ -83,6 +83,5 @@ export class Car {
         } else if (this.speed < 0) {
             this.speed = Math.min( this.speed + 0.05, 0 );
         }
-        console.log(this.speed);
     }
 }

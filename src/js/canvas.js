@@ -1,19 +1,23 @@
 import {Line, Ray} from './geometry';
 
 export class Canvas {
-    constructor( canvasId, carImages, trackImages ) {
+    constructor( canvasId, carImages, map ) {
         this.id = canvasId;
         this.canvas = document.getElementById( canvasId );
         this.ctx = this.canvas.getContext( '2d' );
         this.carImages = carImages;
         for ( let car of this.carImages ) {
-            car.width /= 4;
-            car.height /= 4;
+            car.width /= 2;
+            car.height /= 2;
         }
-        this.trackImages = trackImages;
+        
+        this.map = map;
+        this.canvas.width = this.map.width;
+        this.canvas.height = this.map.height;
     }
 
     clear() {
+        this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
         this.ctx.clearRect( 0, 0, this.canvas.width, this.canvas.height );
     }
 
@@ -26,11 +30,11 @@ export class Canvas {
         this.ctx.drawImage( this.carImages[car.imageId], - width / 2, - height / 2, width, height );
     }
 
-    drawTrack( trackIndex ) {
+    drawMap() {
         this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
-        this.canvas.width = this.trackImages[trackIndex].width;
-        this.canvas.height = this.trackImages[trackIndex].height;
-        this.ctx.drawImage( this.trackImages[trackIndex], 0, 0 );
+        for (let wall of this.map.walls) {
+            this.drawLine(wall);
+        }
     }
 
     drawLine( line ) {
