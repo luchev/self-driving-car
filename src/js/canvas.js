@@ -10,7 +10,7 @@ export class Canvas {
             car.width /= 2;
             car.height /= 2;
         }
-        
+
         this.map = map;
         this.canvas.width = this.map.width;
         this.canvas.height = this.map.height;
@@ -43,6 +43,7 @@ export class Canvas {
         this.ctx.moveTo( line.x1, line.y1 );
         this.ctx.lineTo( line.x2, line.y2 );
         this.ctx.strokeStyle = line.color;
+        this.ctx.lineWidth = line.width;
         this.ctx.stroke();
     }
 
