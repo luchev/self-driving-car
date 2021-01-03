@@ -1,3 +1,5 @@
+import {Line, Ray} from './geometry';
+
 export class Canvas {
     constructor( canvasId, carImages, trackImages ) {
         this.id = canvasId;
@@ -29,5 +31,25 @@ export class Canvas {
         this.canvas.width = this.trackImages[trackIndex].width;
         this.canvas.height = this.trackImages[trackIndex].height;
         this.ctx.drawImage( this.trackImages[trackIndex], 0, 0 );
+    }
+
+    drawLine( line ) {
+        this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
+        this.ctx.beginPath();
+        this.ctx.moveTo( line.x1, line.y1 );
+        this.ctx.lineTo( line.x2, line.y2 );
+        this.ctx.strokeStyle = line.color;
+        this.ctx.stroke();
+    }
+
+    drawPoint( point ) {
+        this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
+        this.ctx.fillStyle = point.color;
+        this.ctx.fillRect( point.x - 3, point.y - 3, 6, 6 );
+    }
+
+    drawRay( x, y, rotation, maxLength=300, color='#000000' ) {
+        let endPoint = Ray.getPointFromOrigin(x, y, rotation, maxLength);
+        this.drawLine(new Line(x, y, endPoint.x, endPoint.y, color));
     }
 }
