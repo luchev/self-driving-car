@@ -66,10 +66,10 @@ export class Car {
 
     turn() {
         if ( this.pressedKeys.has( this.keys['left'] ) ) {
-            this.rotation -= 0.1;
+            this.rotation -= 0.05;
         }
         if ( this.pressedKeys.has( this.keys['right'] ) ) {
-            this.rotation += 0.1;
+            this.rotation += 0.05;
         }
     }
 
@@ -77,7 +77,7 @@ export class Car {
         if ( this.pressedKeys.has( this.keys['forward'] ) ) {
             this.speed = Math.min( this.speed + 0.1, this.maxSpeed );
         } else if ( this.pressedKeys.has( this.keys['back'] ) ) {
-            this.speed = Math.max( this.speed -0.1, this.maxSpeedReverse );
+            this.speed = Math.max( this.speed -0.2, this.maxSpeedReverse );
         } else if (this.speed > 0) {
             this.speed = Math.max( this.speed -0.05, 0 );
         } else if (this.speed < 0) {
