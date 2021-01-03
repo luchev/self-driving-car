@@ -6,7 +6,7 @@ export class Car {
         this.y = 0;
         this.rotation = Math.PI;
         this.maxSpeed = 10;
-        this.maxSpeedReverse = -2;
+        this.maxSpeedReverse = -4;
         this.speed = 0;
         this.imageId = imageId;
         this.sensorAngles = this.init_sensors( 8 );
@@ -76,11 +76,13 @@ export class Car {
     accelerate() {
         if ( this.pressedKeys.has( this.keys['forward'] ) ) {
             this.speed = Math.min( this.speed + 0.1, this.maxSpeed );
-        } else {
-            this.speed = Math.max( this.speed - 0.05, 0 );
+        } else if ( this.pressedKeys.has( this.keys['back'] ) ) {
+            this.speed = Math.max( this.speed -0.1, this.maxSpeedReverse );
+        } else if (this.speed > 0) {
+            this.speed = Math.max( this.speed -0.05, 0 );
+        } else if (this.speed < 0) {
+            this.speed = Math.min( this.speed + 0.05, 0 );
         }
-        if ( this.pressedKeys.has( this.keys['back'] ) ) {
-            this.speed = Math.max( this.speed - 0.1, this.maxSpeedReverse );
-        }
+        console.log(this.speed);
     }
 }
