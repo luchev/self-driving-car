@@ -1,3 +1,5 @@
+import {Line, Ray} from './geometry';
+
 export class Car {
     constructor( imageId = 0 ) {
         this.x = 0;
@@ -7,6 +9,10 @@ export class Car {
         this.maxSpeedReverse = -2;
         this.speed = 0;
         this.imageId = imageId;
+        this.sensorAngles = this.init_sensors( 8 );
+        this.sensorDrawLength = 150;
+        this.drawSensors = true;
+        this.color = '#ff0000'
 
         this.keys = {
             'left': 'a',
@@ -25,16 +31,37 @@ export class Car {
         } );
     }
 
-    tick(progress) {
-        this.turn();
-        this.accelerate();
-        this.move(progress);
+    getSensors() {
+        let sensors = [];
+        for ( let angle of this.sensorAngles ) {
+            let endPoint = Ray.getPointFromOrigin( this.x, this.y, this.rotation + angle, this.sensorDrawLength );
+            sensors.push( new Line( this.x, this.y, endPoint.x, endPoint.y, this.color ) );
+        }
+        return sensors;
     }
 
-    move(progress) {
+    tick( progress ) {
+        this.turn();
+        this.accelerate();
+        this.move( progress );
+    }
+
+    init_sensors( num_sensors ) {
+        let sensors = [];
+        let dAngle = Math.PI * 2 / num_sensors;
+        let sensor = 0;
+        for ( let i = 0; i < num_sensors; i++ ) {
+            sensors.push( sensor );
+            sensor += dAngle;
+        }
+
+        return sensors;
+    }
+
+    move( progress ) {
         progress /= 16;
-        this.x += progress * this.speed * Math.cos(this.rotation);
-        this.y += progress * this.speed * Math.sin(this.rotation);
+        this.x += progress * this.speed * Math.cos( this.rotation );
+        this.y += progress * this.speed * Math.sin( this.rotation );
     }
 
     turn() {

@@ -1,4 +1,5 @@
 import {Car} from './car';
+import {Line, Point} from './geometry';
 
 export class Game {
     constructor( canvas ) {
@@ -13,7 +14,7 @@ export class Game {
 
     update( progress ) {
         for ( let car of this.cars ) {
-            car.tick(progress);
+            car.tick( progress );
         }
     }
 
@@ -21,8 +22,11 @@ export class Game {
         this.canvas.clear();
         this.canvas.drawTrack( 0 );
         for ( let car of this.cars ) {
+            let sensors = car.getSensors();
+            for (let sensor of sensors) {
+                this.canvas.drawLine(sensor);
+            }
             this.canvas.drawCar( car );
-            console.log(car.x, car.y);
         }
     }
 
