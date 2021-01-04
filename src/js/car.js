@@ -1,4 +1,4 @@
-import {Line, Ray} from './geometry';
+import {Line, Segment, Ray, Point} from './geometry';
 
 export class Car {
     constructor( imageId = 0 ) {
@@ -9,10 +9,12 @@ export class Car {
         this.maxSpeedReverse = -4;
         this.speed = 0;
         this.imageId = imageId;
-        this.sensorAngles = this.init_sensors( 8 );
-        this.sensorDrawLength = 150;
+        this.sensorAngles = this.initSensorAngles( 8 );
+        this.sensorDrawLength = 300;
+        this.sensorIntersectionLength = 3000;
         this.drawSensors = true;
-        this.color = '#ff0000'
+        this.sensorIntersections = [];
+        this.color = '#ff0000';
 
         this.keys = {
             'left': 'a',
@@ -31,11 +33,14 @@ export class Car {
         } );
     }
 
-    getSensors() {
+    getSensors(length=-1) {
+        if (length === -1) {
+            length = this.sensorDrawLength;
+        }
         let sensors = [];
         for ( let angle of this.sensorAngles ) {
-            let endPoint = Ray.getPointFromOrigin( this.x, this.y, this.rotation + angle, this.sensorDrawLength );
-            sensors.push( new Line( this.x, this.y, endPoint.x, endPoint.y, this.color ) );
+            let endPoint = Ray.getPointFromOrigin( this.x, this.y, this.rotation + angle, length );
+            sensors.push( new Segment( this.x, this.y, endPoint.x, endPoint.y, this.color ) );
         }
         return sensors;
     }
@@ -46,15 +51,38 @@ export class Car {
         this.move( progress );
     }
 
-    init_sensors( num_sensors ) {
+    updateSensors(walls) {
+        let sensorLines = this.getSensors( this.sensorIntersectionLength );
+        this.sensorIntersections = [];
+        for (let sensor of sensorLines) {
+            let closestIntersection = new Point(Infinity, Infinity);
+            let closestDistance = Infinity;
+            for (let wall of walls) {
+                let intersection = sensor.intersectSegment(wall);
+                if (intersection == null) {
+                    continue;
+                }
+
+                let distance = intersection.squaredDistanceTo(this.x, this.y);
+                if (distance < closestDistance) {
+                    closestIntersection = intersection;
+                    closestDistance = distance;
+                }
+            }
+            closestIntersection.color = '#ff00ff';
+            closestIntersection.width = 6;
+            this.sensorIntersections.push(closestIntersection);
+        }
+    }
+
+    initSensorAngles( num_sensors ) {
         let sensors = [];
         let dAngle = Math.PI * 2 / num_sensors;
-        let sensor = 0;
-        for ( let i = 0; i < num_sensors; i++ ) {
-            sensors.push( sensor );
-            sensor += dAngle;
-        }
-
+        sensors.push(0);
+        sensors.push(dAngle);
+        sensors.push(-dAngle);
+        sensors.push(2 * dAngle);
+        sensors.push(-2 * dAngle);
         return sensors;
     }
 
