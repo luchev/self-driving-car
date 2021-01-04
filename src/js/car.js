@@ -19,6 +19,7 @@ export class Car {
         this.rewards = rewards;
         this.pursuingReward = 0;
         this.distanceToNextReward = this.calculateDistanceToNextReward();
+        this.alive = true;
 
         this.keys = {
             'left': 'a',
@@ -37,12 +38,33 @@ export class Car {
         } );
     }
 
+    tick( progress, walls ) {
+        if (!this.alive) {
+            return;
+        }
+        this.turn();
+        this.accelerate();
+        this.move( progress );
+        this.updateSensors( walls );
+        this.checkReward();
+        this.checkAlive();
+    }
+
+    checkAlive() {
+        for (let point of this.sensorIntersections) {
+            if (point.distanceTo(this.x, this.y) < 25) {
+                this.alive = false;
+                break;
+            }
+        }
+    }
+
     resetRewards() {
         this.pursuingReward = 0;
     }
 
     calculateDistanceToNextReward() {
-        return Math.sqrt( Math.pow( this.x - this.rewards[this.pursuingReward].center.x, 2 ) + Math.pow( this.y - this.rewards[this.pursuingReward].center.y, 2 ) );
+        return Point.distanceBetween( this.x, this.y, this.rewards[this.pursuingReward].center.x, this.rewards[this.pursuingReward].center.y);
     }
 
     getSensors( length = -1 ) {
@@ -55,14 +77,6 @@ export class Car {
             sensors.push( new Segment( this.x, this.y, endPoint.x, endPoint.y, this.color ) );
         }
         return sensors;
-    }
-
-    tick( progress, walls ) {
-        this.turn();
-        this.accelerate();
-        this.move( progress );
-        this.updateSensors( walls );
-        this.checkReward();
     }
 
     checkReward() {
@@ -108,6 +122,7 @@ export class Car {
         sensors.push( -dAngle );
         sensors.push( 2 * dAngle );
         sensors.push( -2 * dAngle );
+        sensors.push( -Math.PI );
         return sensors;
     }
 

@@ -29,11 +29,11 @@ export class Canvas {
         this.ctx.rotate( car.rotation + Math.PI / 2 );
         this.ctx.drawImage( this.carImages[car.imageId], - width / 2, - height / 2, width, height );
         for ( let i = 0; i < car.pursuingReward; i++ ) {
-            this.drawRectangle( car.rewards[i], 0.1 );
+            this.drawRectangle( car.rewards[i], 0.2, '#ffd700' );
         }
-        this.drawRectangle( car.rewards[car.pursuingReward], 1 );
+        this.drawRectangle( car.rewards[car.pursuingReward], 1, '#33ff33' );
         for ( let i = car.pursuingReward + 1; i < car.rewards.length; i++ ) {
-            this.drawRectangle( car.rewards[i], 0.5 );
+            this.drawRectangle( car.rewards[i], 0.5, '#ffd700' );
         }
     }
 
@@ -65,9 +65,9 @@ export class Canvas {
         this.drawSegment( new Line( x, y, endPoint.x, endPoint.y, color ) );
     }
 
-    drawRectangle( rectangle, alpha = 1 ) {
+    drawRectangle( rectangle, alpha = 1, color = '#ffd700' ) {
         this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
-        this.ctx.fillStyle = rectangle.color;
+        this.ctx.fillStyle = color;
         this.ctx.globalAlpha = alpha;
         this.ctx.fillRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
         this.ctx.globalAlpha = 1;

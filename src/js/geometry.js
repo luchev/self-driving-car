@@ -14,8 +14,20 @@ export class Point {
         return Math.pow( this.x - x, 2 ) + Math.pow( this.y - y, 2 );
     }
 
-    static distanceSquaredBetween( x1, y1, x2, y2 ) {
+    distanceTo( point ) {
+        return Math.sqrt(Math.pow( this.x - point.x, 2 ) + Math.pow( this.y - point.y, 2 ));
+    }
+
+    distanceTo( x, y ) {
+        return Math.sqrt(this.squaredDistanceTo( x, y ));
+    }
+
+    static squaredDistanceBetween( x1, y1, x2, y2 ) {
         return Math.pow( x1 - x2, 2 ) + Math.pow( y1 - y2, 2 );
+    }
+
+    static distanceBetween( x1, y1, x2, y2 ) {
+        return Math.sqrt(Math.pow( x1 - x2, 2 ) + Math.pow( y1 - y2, 2 ));
     }
 }
 
@@ -81,12 +93,11 @@ export class Segment extends Line {
 }
 
 export class Square {
-    constructor( x, y, width, height, color = '#ffd700' ) {
+    constructor( x, y, width, height ) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.center = new Point( this.x + this.width / 2, this.y + this.height / 2 );
-        this.color = color;
     }
 }
