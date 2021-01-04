@@ -5,9 +5,14 @@ import {Map} from './map';
 export class Game {
     constructor( canvas, map ) {
         this.lastRender = 0;
-        this.cars = [new Car()];
         this.canvas = canvas;
         this.map = map;
+        this.cars = [new Car()];
+        for ( let car of this.cars ) {
+            car.x = this.map.startPoint.x;
+            car.y = this.map.startPoint.y;
+            car.rotation = this.map.startRotation;
+        }
     }
 
     run() {
@@ -17,6 +22,7 @@ export class Game {
     update( progress ) {
         for ( let car of this.cars ) {
             car.tick( progress );
+            car.updateSensors(this.map.walls);
         }
     }
 
@@ -26,9 +32,14 @@ export class Game {
         for ( let car of this.cars ) {
             let sensors = car.getSensors();
             for (let sensor of sensors) {
-                this.canvas.drawLine(sensor);
+                this.canvas.drawSegment(sensor);
             }
+
             this.canvas.drawCar( car );
+
+            for ( let intersection of car.sensorIntersections) {
+                this.canvas.drawPoint(intersection);
+            }
         }
     }
 
