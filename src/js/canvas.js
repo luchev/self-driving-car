@@ -33,11 +33,11 @@ export class Canvas {
     drawMap() {
         this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
         for (let wall of this.map.walls) {
-            this.drawLine(wall);
+            this.drawSegment(wall);
         }
     }
 
-    drawLine( line ) {
+    drawSegment( line ) {
         this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
         this.ctx.beginPath();
         this.ctx.moveTo( line.x1, line.y1 );
@@ -50,11 +50,11 @@ export class Canvas {
     drawPoint( point ) {
         this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
         this.ctx.fillStyle = point.color;
-        this.ctx.fillRect( point.x - 3, point.y - 3, 6, 6 );
+        this.ctx.fillRect( point.x - point.width / 2, point.y - point.width / 2, point.width, point.width );
     }
 
     drawRay( x, y, rotation, maxLength=300, color='#000000' ) {
         let endPoint = Ray.getPointFromOrigin(x, y, rotation, maxLength);
-        this.drawLine(new Line(x, y, endPoint.x, endPoint.y, color));
+        this.drawSegment(new Line(x, y, endPoint.x, endPoint.y, color));
     }
 }
