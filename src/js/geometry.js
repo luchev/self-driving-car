@@ -62,7 +62,7 @@ export class Segment extends Line {
         if ( denominator == 0 ) {
             return null;
         }
-        
+
         let a = this.y1 - segment.y1;
         let b = this.x1 - segment.x1;
         let numerator1 = ( ( segment.x2 - segment.x1 ) * a ) - ( ( segment.y2 - segment.y1 ) * b );
@@ -78,4 +78,15 @@ export class Segment extends Line {
 
         return null;
     };
+}
+
+export class Square {
+    constructor( x, y, width, height, color = '#ffd700' ) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.center = new Point( this.x + this.width / 2, this.y + this.height / 2 );
+        this.color = color;
+    }
 }

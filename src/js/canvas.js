@@ -7,8 +7,8 @@ export class Canvas {
         this.ctx = this.canvas.getContext( '2d' );
         this.carImages = carImages;
         for ( let car of this.carImages ) {
-            car.width /= 2;
-            car.height /= 2;
+            car.width = 36;
+            car.height = 60;
         }
 
         this.map = map;
@@ -28,12 +28,19 @@ export class Canvas {
         this.ctx.translate( car.x, car.y );
         this.ctx.rotate( car.rotation + Math.PI / 2 );
         this.ctx.drawImage( this.carImages[car.imageId], - width / 2, - height / 2, width, height );
+        for ( let i = 0; i < car.pursuingReward; i++ ) {
+            this.drawRectangle( car.rewards[i], 0.1 );
+        }
+        this.drawRectangle( car.rewards[car.pursuingReward], 1 );
+        for ( let i = car.pursuingReward + 1; i < car.rewards.length; i++ ) {
+            this.drawRectangle( car.rewards[i], 0.5 );
+        }
     }
 
     drawMap() {
         this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
-        for (let wall of this.map.walls) {
-            this.drawSegment(wall);
+        for ( let wall of this.map.walls ) {
+            this.drawSegment( wall );
         }
     }
 
@@ -53,8 +60,16 @@ export class Canvas {
         this.ctx.fillRect( point.x - point.width / 2, point.y - point.width / 2, point.width, point.width );
     }
 
-    drawRay( x, y, rotation, maxLength=300, color='#000000' ) {
-        let endPoint = Ray.getPointFromOrigin(x, y, rotation, maxLength);
-        this.drawSegment(new Line(x, y, endPoint.x, endPoint.y, color));
+    drawRay( x, y, rotation, maxLength = 300, color = '#000000' ) {
+        let endPoint = Ray.getPointFromOrigin( x, y, rotation, maxLength );
+        this.drawSegment( new Line( x, y, endPoint.x, endPoint.y, color ) );
+    }
+
+    drawRectangle( rectangle, alpha = 1 ) {
+        this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
+        this.ctx.fillStyle = rectangle.color;
+        this.ctx.globalAlpha = alpha;
+        this.ctx.fillRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
+        this.ctx.globalAlpha = 1;
     }
 }

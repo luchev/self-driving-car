@@ -3,7 +3,7 @@ import {Canvas} from './canvas';
 import {Car} from './car';
 import {Game} from './game';
 import {Map} from './map';
-import {Line, Segment, Point} from './geometry';
+import {Segment, Point, Square} from './geometry';
 
 window.global = window;
 window.Buffer = window.Buffer || require( 'buffer' ).Buffer;
@@ -100,15 +100,67 @@ walls.push( new Segment( 176.318, 599.915, 182.888, 506.98, '#000', 5 ) );
 walls.push( new Segment( 182.897, 508.565, 574.315, 505.103, '#000', 5 ) );
 walls.push( new Segment( 574.315, 505.103, 575.032, 1425.41, '#000', 5 ) );
 
-let map1StartPoint = new Point(100, 100);
-let map1Rotation = 0;
-let map1 = new Map(2100, 1600, walls, map1StartPoint, map1Rotation);
+let rewards = [];
+
+rewards.push( new Square( 259.485, 69.991, 50, 50 ) );
+rewards.push( new Square( 524.304, 65.558, 50, 50 ) );
+rewards.push( new Square( 780.466, 67.428, 50, 50 ) );
+rewards.push( new Square( 982.404, 267.497, 50, 50 ) );
+rewards.push( new Square( 1208.649, 293.674, 50, 50 ) );
+rewards.push( new Square( 1474.161, 102.955, 50, 50 ) );
+rewards.push( new Square( 1840.641, 97.345, 50, 50 ) );
+rewards.push( new Square( 1964.048, 310.502, 50, 50 ) );
+rewards.push( new Square( 1958.438, 544.227, 50, 50 ) );
+rewards.push( new Square( 1964.048, 768.602, 50, 50 ) );
+rewards.push( new Square( 1965.918, 976.15, 50, 50 ) );
+rewards.push( new Square( 1797.636, 1187.437, 50, 50 ) );
+rewards.push( new Square( 1591.958, 978.02, 50, 50 ) );
+rewards.push( new Square( 1436.765, 817.217, 50, 50 ) );
+rewards.push( new Square( 1548.953, 654.545, 50, 50 ) );
+rewards.push( new Square( 1623.745, 491.872, 50, 50 ) );
+rewards.push( new Square( 1618.135, 310.502, 50, 50 ) );
+rewards.push( new Square( 1444.244, 256.278, 50, 50 ) );
+rewards.push( new Square( 1318.968, 402.122, 50, 50 ) );
+rewards.push( new Square( 1169.384, 613.409, 50, 50 ) );
+rewards.push( new Square( 1167.514, 830.306, 50, 50 ) );
+rewards.push( new Square( 1169.384, 1112.645, 50, 50 ) );
+rewards.push( new Square( 1274.092, 1264.099, 50, 50 ) );
+rewards.push( new Square( 1361.973, 1451.079, 50, 50 ) );
+rewards.push( new Square( 1100.201, 1454.818, 50, 50 ) );
+rewards.push( new Square( 896.393, 1456.688, 50, 50 ) );
+rewards.push( new Square( 660.799, 1460.427, 50, 50 ) );
+rewards.push( new Square( 445.772, 1454.818, 50, 50 ) );
+rewards.push( new Square( 217.657, 1454.818, 50, 50 ) );
+rewards.push( new Square( 92.381, 1292.146, 50, 50 ) );
+rewards.push( new Square( 202.699, 1069.64, 50, 50 ) );
+rewards.push( new Square( 363.501, 888.269, 50, 50 ) );
+rewards.push( new Square( 363.501, 645.196, 50, 50 ) );
+rewards.push( new Square( 103.599, 632.107, 50, 50 ) );
+rewards.push( new Square( 213.917, 433.909, 50, 50 ) );
+rewards.push( new Square( 599.096, 430.169, 50, 50 ) );
+rewards.push( new Square( 606.575, 703.16, 50, 50 ) );
+rewards.push( new Square( 604.705, 916.316, 50, 50 ) );
+rewards.push( new Square( 608.445, 1146.302, 50, 50 ) );
+rewards.push( new Square( 720.633, 1340.76, 50, 50 ) );
+rewards.push( new Square( 963.706, 1344.5, 50, 50 ) );
+rewards.push( new Square( 1057.196, 1161.26, 50, 50 ) );
+rewards.push( new Square( 1051.587, 871.441, 50, 50 ) );
+rewards.push( new Square( 1049.717, 609.67, 50, 50 ) );
+rewards.push( new Square( 956.227, 433.909, 50, 50 ) );
+rewards.push( new Square( 804.773, 267.497, 50, 50 ) );
+rewards.push( new Square( 591.617, 192.705, 50, 50 ) );
+rewards.push( new Square( 357.892, 188.965, 50, 50 ) );
+rewards.push( new Square( 75.552, 181.486, 50, 50 ) );
+
+let carStartPoint = new Point( 100, 100 );
+let carStartingRotation = 0;
+let map1 = new Map( 2100, 1600, carStartPoint, carStartingRotation, walls, rewards );
 
 /* Main program */
 
 function main() {
     let canvas = new Canvas( 'canvas', carImages, map1 );
-    let game = new Game(canvas, map1);
+    let game = new Game( canvas, map1 );
     game.run();
 }
 
@@ -124,6 +176,6 @@ function main() {
 //     // return false; // cancels this function only
 // } );
 
-setTimeout(() => {
+setTimeout( () => {
     main();
-}, 100);
+}, 100 );

@@ -1,10 +1,10 @@
-import {Point} from './geometry';
 export class Map {
-    constructor( width, height, walls, startPoint, startRotation ) {
+    constructor( width, height, startPoint, startRotation, walls, rewards ) {
         this.width = width;
         this.height = height;
-        this.walls = walls;
         this.startPoint = startPoint;
         this.startRotation = startRotation;
+        this.walls = walls;
+        this.rewards = rewards;
     }
 }

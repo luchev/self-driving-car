@@ -1,18 +1,11 @@
 import {Car} from './car';
-import {Line, Point} from './geometry';
-import {Map} from './map';
 
 export class Game {
     constructor( canvas, map ) {
         this.lastRender = 0;
         this.canvas = canvas;
         this.map = map;
-        this.cars = [new Car()];
-        for ( let car of this.cars ) {
-            car.x = this.map.startPoint.x;
-            car.y = this.map.startPoint.y;
-            car.rotation = this.map.startRotation;
-        }
+        this.cars = [new Car( 0, this.map.startPoint.x, this.map.startPoint.y, this.map.startRotation, this.map.rewards )];
     }
 
     run() {
@@ -21,8 +14,7 @@ export class Game {
 
     update( progress ) {
         for ( let car of this.cars ) {
-            car.tick( progress );
-            car.updateSensors(this.map.walls);
+            car.tick( progress, this.map.walls );
         }
     }
 
@@ -31,14 +23,14 @@ export class Game {
         this.canvas.drawMap();
         for ( let car of this.cars ) {
             let sensors = car.getSensors();
-            for (let sensor of sensors) {
-                this.canvas.drawSegment(sensor);
+            for ( let sensor of sensors ) {
+                this.canvas.drawSegment( sensor );
             }
 
             this.canvas.drawCar( car );
 
-            for ( let intersection of car.sensorIntersections) {
-                this.canvas.drawPoint(intersection);
+            for ( let intersection of car.sensorIntersections ) {
+                this.canvas.drawPoint( intersection );
             }
         }
     }
