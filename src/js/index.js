@@ -156,6 +156,11 @@ let carStartPoint = new Point( 100, 100 );
 let carStartingRotation = 0;
 let map1 = new Map( 2100, 1600, carStartPoint, carStartingRotation, walls, rewards );
 
+/* Policy network */
+
+import {Model} from './model';
+import {Memory} from './memory';
+
 /* Main program */
 
 function main() {

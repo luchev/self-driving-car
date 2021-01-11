@@ -16,9 +16,7 @@ export class Memory {
     addSample(sample) {
         this.samples.push(sample);
         if (this.samples.length > this.maxMemory) {
-            let [state,,, nextState] = this.samples.shift();
-            state.dispose();
-            nextState.dispose();
+            this.samples.shift();
         }
     }
 

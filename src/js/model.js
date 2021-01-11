@@ -7,7 +7,6 @@ export class Model {
      * @param {number} numActions
      * @param {number} batchSize
      */
-
     constructor(hiddenLayerSizesOrModel, numStates, numActions, batchSize) {
       this.numStates = numStates;
       this.numActions = numActions;
@@ -67,10 +66,7 @@ export class Model {
             return Math.floor(Math.random() * this.numActions) - 1;
         } else {
             return tf.tidy(() => {
-                const logits = this.network.predict(state);
-                const sigmoid = tf.sigmoid(logits);
-                const probs = tf.div(sigmoid, tf.sum(sigmoid));
-                return tf.multinomial(probs, 1).dataSync()[0] - 1;
+                return this.network.predict(state).argMax(1).dataSync()[0] - 1;
             });
         }
     }
