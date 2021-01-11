@@ -15,11 +15,11 @@ export class Point {
     }
 
     distanceTo( point ) {
-        return Math.sqrt(Math.pow( this.x - point.x, 2 ) + Math.pow( this.y - point.y, 2 ));
+        return Math.sqrt( Math.pow( this.x - point.x, 2 ) + Math.pow( this.y - point.y, 2 ) );
     }
 
     distanceTo( x, y ) {
-        return Math.sqrt(this.squaredDistanceTo( x, y ));
+        return Math.sqrt( this.squaredDistanceTo( x, y ) );
     }
 
     static squaredDistanceBetween( x1, y1, x2, y2 ) {
@@ -27,7 +27,7 @@ export class Point {
     }
 
     static distanceBetween( x1, y1, x2, y2 ) {
-        return Math.sqrt(Math.pow( x1 - x2, 2 ) + Math.pow( y1 - y2, 2 ));
+        return Math.sqrt( Math.pow( x1 - x2, 2 ) + Math.pow( y1 - y2, 2 ) );
     }
 }
 

@@ -1,11 +1,11 @@
-import { sampleSize } from 'lodash';
+import {sampleSize} from 'lodash';
 
 
 export class Memory {
     /**
      * @param {number} maxMemory
      */
-    constructor(maxMemory) {
+    constructor( maxMemory ) {
         this.maxMemory = maxMemory;
         this.samples = new Array();
     }
@@ -13,9 +13,9 @@ export class Memory {
     /**
      * @param {Array} sample
      */
-    addSample(sample) {
-        this.samples.push(sample);
-        if (this.samples.length > this.maxMemory) {
+    addSample( sample ) {
+        this.samples.push( sample );
+        if ( this.samples.length > this.maxMemory ) {
             this.samples.shift();
         }
     }
@@ -24,7 +24,7 @@ export class Memory {
      * @param {number} nSamples
      * @returns {Array} Randomly selected samples
      */
-    sample(nSamples) {
-        return sampleSize(this.samples, nSamples);
+    sample( nSamples ) {
+        return sampleSize( this.samples, nSamples );
     }
 }

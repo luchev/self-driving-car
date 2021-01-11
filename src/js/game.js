@@ -23,7 +23,7 @@ export class Game {
     }
 
     update( progress ) {
-        let instructions = Instruction.buildFromDictionary(this.pressedKeys);
+        let instructions = Instruction.buildFromDictionary( this.pressedKeys );
         for ( let car of this.cars ) {
             car.update( instructions, progress, this.map.walls );
         }

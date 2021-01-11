@@ -33,18 +33,18 @@ Instruction.keys = {
     'back': 's',
 }
 
-Instruction.hasBack = function(x) {
+Instruction.hasBack = function ( x ) {
     return Instruction.Back & x;
 }
 
-Instruction.hasLeft = function(x) {
+Instruction.hasLeft = function ( x ) {
     return Instruction.Left & x;
 }
 
-Instruction.hasRight = function(x) {
+Instruction.hasRight = function ( x ) {
     return Instruction.Right & x;
 }
 
-Instruction.hasForward = function(x) {
+Instruction.hasForward = function ( x ) {
     return Instruction.Forward & x;
 }
