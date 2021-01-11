@@ -1,50 +1,40 @@
 import {Line, Segment, Ray, Point} from './geometry';
+import {Instruction} from './instruction';
 
 export class Car {
     constructor( imageId = 0, x, y, rotation, rewards ) {
         this.x = x;
         this.y = y;
         this.rotation = rotation;
-        this.points = 0;
-        this.maxSpeed = 10;
-        this.maxSpeedReverse = -4;
         this.speed = 0;
-        this.imageId = imageId;
-        this.sensorAngles = this.initSensorAngles( 8 );
-        this.sensorDrawLength = 300;
-        this.sensorIntersectionLength = 3000;
-        this.drawSensors = true;
-        this.sensorIntersections = [];
-        this.color = '#ff0000';
+        
+        this.points = 0;
+        this.alive = true;
         this.rewards = rewards;
         this.pursuingReward = 0;
         this.distanceToNextReward = this.calculateDistanceToNextReward();
-        this.alive = true;
-
-        this.keys = {
-            'left': 'a',
-            'right': 'd',
-            'forward': 'w',
-            'back': 's',
-        }
-
-        this.pressedKeys = new Set();
-        document.body.addEventListener( "keydown", ( e ) => {
-            this.pressedKeys.add( e.key.toLowerCase() );
-        } );
-
-        document.body.addEventListener( "keyup", ( e ) => {
-            this.pressedKeys.delete( e.key.toLowerCase() );
-        } );
+        
+        this.maxSpeed = 10;
+        this.maxSpeedReverse = -4;
+        
+        this.imageId = imageId;
+        
+        this.sensorAngles = this.initSensorAngles( 8 );
+        this.sensorIntersectionLength = 3000;
+        this.sensorIntersections = [];
+        
+        this.sensorDrawLength = 300;
+        this.drawSensors = true;
+        this.color = '#ff0000';
     }
 
-    tick( progress, walls ) {
+    update( instructions, progress, walls ) {
         if (!this.alive) {
             return;
         }
-        this.turn();
-        this.accelerate();
-        this.move( progress );
+        this.turn(instructions);
+        this.accelerate(instructions);
+        this.move( progress / 16 );
         this.updateSensors( walls );
         this.checkReward();
         this.checkAlive();
@@ -126,25 +116,24 @@ export class Car {
         return sensors;
     }
 
-    move( progress ) {
-        progress /= 16;
+    move( progress = 1 ) {
         this.x += progress * this.speed * Math.cos( this.rotation );
         this.y += progress * this.speed * Math.sin( this.rotation );
     }
 
-    turn() {
-        if ( this.pressedKeys.has( this.keys['left'] ) ) {
+    turn(instructions) {
+        if ( Instruction.hasLeft(instructions) ) {
             this.rotation -= 0.05;
         }
-        if ( this.pressedKeys.has( this.keys['right'] ) ) {
+        if ( Instruction.hasRight( instructions ) ) {
             this.rotation += 0.05;
         }
     }
 
-    accelerate() {
-        if ( this.pressedKeys.has( this.keys['forward'] ) ) {
+    accelerate( instructions) {
+        if ( Instruction.hasForward( instructions ) ) {
             this.speed = Math.min( this.speed + 0.1, this.maxSpeed );
-        } else if ( this.pressedKeys.has( this.keys['back'] ) ) {
+        } else if ( Instruction.hasBack( instructions ) ) {
             this.speed = Math.max( this.speed - 0.2, this.maxSpeedReverse );
         } else if ( this.speed > 0 ) {
             this.speed = Math.max( this.speed - 0.05, 0 );
