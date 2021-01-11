@@ -3,6 +3,10 @@ import {Instruction} from './instruction';
 
 export class Car {
     constructor( imageId = 0, x, y, rotation, rewards ) {
+        this.originalX = x;
+        this.originalY = y;
+        this.originalRotation = rotation;
+
         this.x = x;
         this.y = y;
         this.rotation = rotation;
@@ -40,10 +44,24 @@ export class Car {
         this.checkAlive();
     }
 
+    reset() {
+        this.x = this.originalX;
+        this.y = this.originalY;
+        this.rotation = this.originalRotation;
+        this.speed = 0;
+        
+        this.alive = true;
+        this.points = 0;
+        
+        this.pursuingReward = 0;
+        this.distanceToNextReward = this.calculateDistanceToNextReward();
+    }
+
     checkAlive() {
         for (let point of this.sensorIntersections) {
             if (point.distanceTo(this.x, this.y) < 25) {
                 this.alive = false;
+                this.speed = 0;
                 break;
             }
         }
