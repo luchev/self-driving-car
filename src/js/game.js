@@ -6,7 +6,7 @@ export class Game {
         this.lastRender = 0;
         this.canvas = canvas;
         this.map = map;
-        this.cars = [new Car( 0, this.map.startPoint.x, this.map.startPoint.y, this.map.startRotation, this.map.rewards )];
+        this.cars = [new Car( 0, this.map.startPoint.x, this.map.startPoint.y, this.map.startRotation, this.map.rewards, this.map.walls )];
 
         this.pressedKeys = new Set();
         document.body.addEventListener( "keydown", ( e ) => {
@@ -25,7 +25,7 @@ export class Game {
     update( progress ) {
         let instructions = Instruction.buildFromDictionary( this.pressedKeys );
         for ( let car of this.cars ) {
-            car.update( instructions, progress, this.map.walls );
+            car.update( instructions );
         }
     }
 

@@ -1,8 +1,10 @@
-import {Line, Segment, Ray, Point} from './geometry';
+import * as tf from '@tensorflow/tfjs';
+
+import {Segment, Ray, Point} from './geometry';
 import {Instruction} from './instruction';
 
 export class Car {
-    constructor( imageId = 0, x, y, rotation, rewards ) {
+    constructor( imageId = 0, x, y, rotation, rewards, walls ) {
         this.originalX = x;
         this.originalY = y;
         this.originalRotation = rotation;
@@ -15,6 +17,7 @@ export class Car {
         this.points = 0;
         this.alive = true;
         this.rewards = rewards;
+        this.walls = walls;
         this.pursuingReward = 0;
         this.distanceToNextReward = this.calculateDistanceToNextReward();
 
@@ -32,14 +35,14 @@ export class Car {
         this.color = '#ff0000';
     }
 
-    update( instructions, progress, walls ) {
+    update( instructions ) {
         if ( !this.alive ) {
             return;
         }
         this.turn( instructions );
         this.accelerate( instructions );
-        this.move( progress / 16 );
-        this.updateSensors( walls );
+        this.move();
+        this.updateSensors();
         this.checkReward();
         this.checkAlive();
     }
@@ -55,6 +58,10 @@ export class Car {
 
         this.pursuingReward = 0;
         this.distanceToNextReward = this.calculateDistanceToNextReward();
+    }
+
+    getStateTensor() {
+        return tf.tensor2d( [[this.x, this.y, this.rotation, this.speed]] );
     }
 
     checkAlive() {
@@ -98,13 +105,13 @@ export class Car {
         }
     }
 
-    updateSensors( walls ) {
+    updateSensors() {
         let sensorLines = this.getSensors( this.sensorIntersectionLength );
         this.sensorIntersections = [];
         for ( let sensor of sensorLines ) {
             let closestIntersection = new Point( Infinity, Infinity );
             let closestDistance = Infinity;
-            for ( let wall of walls ) {
+            for ( let wall of this.walls ) {
                 let intersection = sensor.intersectSegment( wall );
                 if ( intersection == null ) {
                     continue;
