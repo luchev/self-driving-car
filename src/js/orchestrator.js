@@ -1,7 +1,7 @@
 import { MountainCar } from './mountain_car';
 import { Model } from './model';
 import { Memory } from './memory';
-import { maybeRenderDuringTraining, setUpUI } from './ui';
+import { maybeRenderDuringTraining, setUpUI } from './ui_old';
 
 import * as tf from '@tensorflow/tfjs';
 

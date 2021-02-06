@@ -1,4 +1,3 @@
-import {Car} from './car';
 import {Instruction} from './instruction';
 
 export class Game {
@@ -6,7 +5,7 @@ export class Game {
         this.lastRender = 0;
         this.canvas = canvas;
         this.map = map;
-        this.cars = [new Car( 0, this.map.startPoint.x, this.map.startPoint.y, this.map.startRotation, this.map.rewards, this.map.walls )];
+        this.cars = [];
 
         this.pressedKeys = new Set();
         document.body.addEventListener( "keydown", ( e ) => {
@@ -29,21 +28,28 @@ export class Game {
         }
     }
 
+    reset() {
+        this.canvas.clear();
+        this.canvas.drawMap();
+    }
+
     draw() {
         this.canvas.clear();
         this.canvas.drawMap();
-        for ( let car of this.cars ) {
+    }
+
+    drawCar( car, showRewardsCheckbox, showSensorsCheckbox ) {
+        if ( showSensorsCheckbox ) {
             let sensors = car.getSensors();
             for ( let sensor of sensors ) {
                 this.canvas.drawSegment( sensor );
             }
-
-            this.canvas.drawCar( car );
-
             for ( let intersection of car.sensorIntersections ) {
                 this.canvas.drawPoint( intersection );
             }
         }
+        
+        this.canvas.drawCar( car, showRewardsCheckbox );
     }
 
     loop( timestamp ) {

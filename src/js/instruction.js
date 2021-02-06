@@ -12,7 +12,7 @@ export class Instruction {
             result |= Instruction.Right;
         }
         if ( dict.has( Instruction.keys['forward'] ) ) {
-            result |= Instruction.Forward;
+            result |= Instruction.Straight;
         }
         if ( dict.has( Instruction.keys['back'] ) ) {
             result |= Instruction.Back;
@@ -24,7 +24,7 @@ export class Instruction {
 
 Instruction.Left = 0b1;
 Instruction.Right = 0b10;
-Instruction.Forward = 0b100;
+Instruction.Straight = 0b100;
 Instruction.Back = 0b1000;
 Instruction.keys = {
     'left': 'a',
@@ -46,5 +46,5 @@ Instruction.hasRight = function ( x ) {
 }
 
 Instruction.hasForward = function ( x ) {
-    return Instruction.Forward & x;
+    return Instruction.Straight & x;
 }

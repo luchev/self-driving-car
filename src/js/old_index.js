@@ -3,7 +3,7 @@ import * as tf from '@tensorflow/tfjs';
 
 import { Model } from './model';
 import { Orchestrator } from './orchestrator';
-import { onGameEnd, setUpUI} from './ui';
+import { onGameEnd, setUpUI} from './ui_old';
 import { Memory } from './memory';
 
 /**
