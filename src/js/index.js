@@ -53,7 +53,7 @@ image.src = `data:image/${extension.split( '.' ).pop()};base64,${base64Image}`;
 trackImages.push( image );
 
 const canvas = new Canvas( 'car-canvas', carImages, Map.default() );
-let car = Car.default();
+var car = Car.default();
 
 const gameCanvas = document.getElementById( 'game-canvas' );
 
@@ -157,7 +157,7 @@ function enableGameButtons() {
 
 async function initGame() {
     game = new Game( canvas, Map.default() );
-    car = Car.default();
+    car.reset();
 
     const stateTensor = Car.getStatesTensors( [car.getState()] );
 
@@ -165,6 +165,7 @@ async function initGame() {
         qNet.predict( stateTensor );
     }
 
+    stateTensor.dispose();
     await reset();
 
     stepButton.addEventListener( 'click', step );

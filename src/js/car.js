@@ -24,6 +24,8 @@ const NO_GATE_REWARD = -0.1;
 const GATE_REWARD = 1000;
 const DEATH_REWARD = -1000;
 
+var car = null;
+
 export class Car {
     constructor( imageId = 0, x, y, rotation, rewards, walls ) {
         this.originalX = x;
@@ -153,7 +155,9 @@ export class Car {
         }
         const numExamples = states.length;
 
-        let car = Car.default();
+        if (car == null) {
+            car = Car.default();
+        }
         const buffer = tf.buffer( [numExamples, NUM_INPUTS, 1] );
 
         for ( let n = 0; n < numExamples; ++n ) {
@@ -176,7 +180,6 @@ export class Car {
             }
 
         }
-        car = null;
         return buffer.toTensor();
     }
 
