@@ -21,7 +21,7 @@ const NUM_SENSORS = 8;
 const NUM_INPUTS = 5 + NUM_SENSORS;
 
 const NO_GATE_REWARD = -0.1;
-const GATE_REWARD = 1000;
+const GATE_REWARD = 100;
 const DEATH_REWARD = -1000;
 
 var car = null;
