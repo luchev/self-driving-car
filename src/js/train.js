@@ -77,22 +77,20 @@ export async function train(
                 summaryWriter.scalar(
                     'framesPerSecond', framesPerSecond, agent.frameCount );
             }
-            if ( averageReward100 >= cumulativeRewardThreshold ||
-                agent.frameCount >= maxNumFrames ) {
-                break;
-            }
             if ( averageReward100 > averageReward100Best ) {
                 averageReward100Best = averageReward100;
+                let date = new Date(Date.now()).toLocaleTimeString('it-IT');
                 if ( savePath != null ) {
-                    await agent.onlineNetwork.save( `file://${savePath}-` + Date.now() );
-                    console.log( `Saved DQN to ${savePath}-` + Date.now() );
+                    await agent.onlineNetwork.save( `file://${savePath}-` + date );
+                    console.log( `Saved DQN to ${savePath}-` + date );
                 }
             }
             if ( averageGates100 > averageGates100Best ) {
                 averageGates100Best = averageGates100;
+                let date = new Date(Date.now()).toLocaleTimeString('it-IT');
                 if ( savePath != null ) {
-                    await agent.onlineNetwork.save( `file://${savePath}-gates-` + Date.now() );
-                    console.log( `Saved DQN to ${savePath}-gates-` + + Date.now() );
+                    await agent.onlineNetwork.save( `file://${savePath}-gates-` + date );
+                    console.log( `Saved DQN to ${savePath}-gates-` + date );
                 }
             }
         }
@@ -112,36 +110,9 @@ export function parseArguments() {
         help: 'Whether to use tfjs-node-gpu for training ' +
             '(requires CUDA GPU, drivers, and libraries).'
     } );
-    parser.addArgument( '--height', {
-        type: 'int',
-        defaultValue: 9,
-        help: 'Height of the game board.'
-    } );
-    parser.addArgument( '--width', {
-        type: 'int',
-        defaultValue: 9,
-        help: 'Width of the game board.'
-    } );
-    parser.addArgument( '--numFruits', {
-        type: 'int',
-        defaultValue: 1,
-        help: 'Number of fruits present on the board at any given time.'
-    } );
-    parser.addArgument( '--initLen', {
-        type: 'int',
-        defaultValue: 2,
-        help: 'Initial length of the snake, in number of squares.'
-    } );
-    parser.addArgument( '--cumulativeRewardThreshold', {
-        type: 'float',
-        defaultValue: 10000,
-        help: 'Threshold for cumulative reward (its moving ' +
-            'average) over the 100 latest games. Training stops as soon as this ' +
-            'threshold is reached (or when --maxNumFrames is reached).'
-    } );
     parser.addArgument( '--maxNumFrames', {
         type: 'float',
-        defaultValue: 1e6,
+        defaultValue: 1e9,
         help: 'Maximum number of frames to run durnig the training. ' +
             'Training ends immediately when this frame count is reached.'
     } );
