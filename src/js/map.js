@@ -57,10 +57,12 @@ export class Map {
         walls.push( new Segment( 574.315, 505.103, 575.032, 1425.41, '#000', 5 ) );
 
         let rewards = [];
-        rewards.push( new Square( 259.485, 69.991, 50, 50 ) );
+        rewards.push( new Square( 160.452, 69.991, 50, 50 ) );
+        rewards.push( new Square( 309.485, 69.991, 50, 50 ) );
         rewards.push( new Square( 524.304, 65.558, 50, 50 ) );
         rewards.push( new Square( 780.466, 67.428, 50, 50 ) );
         rewards.push( new Square( 982.404, 267.497, 50, 50 ) );
+        rewards.push( new Square( 1100.404, 350.497, 50, 50 ) );
         rewards.push( new Square( 1208.649, 293.674, 50, 50 ) );
         rewards.push( new Square( 1474.161, 102.955, 50, 50 ) );
         rewards.push( new Square( 1840.641, 97.345, 50, 50 ) );
@@ -68,6 +70,7 @@ export class Map {
         rewards.push( new Square( 1958.438, 544.227, 50, 50 ) );
         rewards.push( new Square( 1964.048, 768.602, 50, 50 ) );
         rewards.push( new Square( 1965.918, 976.15, 50, 50 ) );
+        rewards.push( new Square( 1965.918, 1206.15, 50, 50 ) );
         rewards.push( new Square( 1797.636, 1187.437, 50, 50 ) );
         rewards.push( new Square( 1591.958, 978.02, 50, 50 ) );
         rewards.push( new Square( 1436.765, 817.217, 50, 50 ) );
