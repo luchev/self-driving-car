@@ -47,7 +47,7 @@ export async function train(
     let tPrev = new Date().getTime();
     let frameCountPrev = agent.frameCount;
     let averageReward100Best = -Infinity;
-    let averageGates100Best = -Infinity;
+    let lastMinuteSave = -1;
     while ( true ) {
         agent.trainOnReplayBatch( batchSize, gamma, optimizer );
         const {cumulativeReward, done, gatesReached} = agent.playStep();
@@ -77,20 +77,24 @@ export async function train(
                 summaryWriter.scalar(
                     'framesPerSecond', framesPerSecond, agent.frameCount );
             }
+            
+            let now = new Date(Date.now()); 
+
             if ( averageReward100 > averageReward100Best ) {
                 averageReward100Best = averageReward100;
-                let date = new Date(Date.now()).toLocaleTimeString('it-IT');
+                let date = now.toLocaleTimeString('it-IT');
                 if ( savePath != null ) {
-                    await agent.onlineNetwork.save( `file://${savePath}-` + date );
+                    await agent.onlineNetwork.save( `file://${savePath}-` + date + ' acc ' + averageReward100);
                     console.log( `Saved DQN to ${savePath}-` + date );
                 }
             }
-            if ( averageGates100 > averageGates100Best ) {
-                averageGates100Best = averageGates100;
-                let date = new Date(Date.now()).toLocaleTimeString('it-IT');
+            
+            if ( now.getMinutes() % 10 == 0 && now.getMinutes() != lastMinuteSave ) {
+                lastMinuteSave = now.getMinutes();
+                let date = now.toLocaleTimeString('it-IT');
                 if ( savePath != null ) {
-                    await agent.onlineNetwork.save( `file://${savePath}-gates-` + date );
-                    console.log( `Saved DQN to ${savePath}-gates-` + date );
+                    await agent.onlineNetwork.save( `file://${savePath}-timed-` + date + ' acc ' + averageReward100);
+                    console.log( `Saved DQN to ${savePath}-timed-` + date );
                 }
             }
         }
