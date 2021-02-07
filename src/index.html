@@ -46,16 +46,14 @@ limitations under the License.
 <body>
   <div class='tfjs-example-container centered-container'>
     <section class='title-area'>
-      <h1>TensorFlow.js Reinforcement Learning: Snake DQN</h1>
-      <p class='subtitle'>Deep Q-Network for the Snake Game</p>
+      <h1>Reinforcement Learning: Autonomous car</h1>
+      <p class='subtitle'>Deep Q-Network for Autonomous car</p>
     </section>
     <section>
       <p class='section-head'>Description</p>
       <p>
-        This page loads a trained Deep Q-Network (DQN) and use it to play the
-        snake game.
+        This page loads a trained Deep Q-Network (DQN) and uses it to drive a car along a predefined track.
         The training is done in Node.js using <a href="https://github.com/tensorflow/tfjs-node">tfjs-node</a>.
-        See <a href="https://github.com/tensorflow/tfjs-examples/blob/master/snake-dqn/train.js">train.js</a>.
       </p>
     </section>
     <section>
@@ -63,9 +61,7 @@ limitations under the License.
       <p>
         A <a href="https://en.wikipedia.org/wiki/Q-learning#Variants">DQN</a> is trained to estimate the value of
         actions given the current game state.
-        The DQN is a 2D convolutional network. See <a
-          href="https://github.com/tensorflow/tfjs-examples/blob/master/snake-dqn/dqn.js">dqn.js</a>.
-        The epsilon-greedy algorithm is used to balance exploration and exploitation during training.
+        The DQN is a 1D convolutional network. See dqn.js.
       </p>
     </section>
 
@@ -94,10 +90,10 @@ limitations under the License.
 
     <section>
       <p class='section-head'>Simulation</p>
-      <div>
-        <canvas id="car-canvas"></canvas>
-      </div>
     </section>
+  </div>
+  <div>
+    <canvas id="car-canvas"></canvas>
   </div>
 
 </body>
