@@ -66,6 +66,19 @@ const gameStatusSpan = document.getElementById( 'game-status' );
 const showSensorsCheckbox = document.getElementById( 'show-sensors' );
 const showRewardsCheckbox = document.getElementById( 'show-rewards' );
 
+showSensorsCheckbox.checked = false;
+showRewardsCheckbox.checked = false;
+
+showSensorsCheckbox.addEventListener('click', () => {
+    game.draw();
+    game.drawCar( car, showRewardsCheckbox.checked, showSensorsCheckbox.checked );
+});
+
+showRewardsCheckbox.addEventListener( 'click', () => {
+    game.draw();
+    game.drawCar( car, showRewardsCheckbox.checked, showSensorsCheckbox.checked );
+} );
+
 let game;
 let qNet;
 
