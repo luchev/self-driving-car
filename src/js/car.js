@@ -5,8 +5,7 @@ import {Instruction} from './instruction';
 import {Map} from './map';
 import {ReplayMemory} from './replay_memory';
 import {createDeepQNetwork} from './dqn';
-// import {SnakeGame, getStateTensor} from './snake_game';
-import {assertPositiveInteger, getRandomInteger} from './utils';
+import {getRandomInteger} from './utils';
 
 const ACTION_STRAIGHT = Instruction.Straight;
 const ACTION_STRAIGHT_LEFT = Instruction.Straight | Instruction.Left;
@@ -14,6 +13,7 @@ const ACTION_STRAIGHT_RIGHT = Instruction.Straight | Instruction.Right;
 const ACTION_BACK = Instruction.Back;
 const ACTION_BACK_LEFT = Instruction.Back | Instruction.Left;
 const ACTION_BACK_RIGHT = Instruction.Back | Instruction.Right;
+// export const ALL_ACTIONS = [ACTION_BACK, ACTION_STRAIGHT, ACTION_STRAIGHT_LEFT, ACTION_STRAIGHT_RIGHT];
 export const ALL_ACTIONS = [ACTION_STRAIGHT, ACTION_STRAIGHT_LEFT, ACTION_STRAIGHT_RIGHT, ACTION_BACK, ACTION_BACK_LEFT, ACTION_BACK_RIGHT];
 export const NUM_ACTIONS = ALL_ACTIONS.length;
 
@@ -22,7 +22,7 @@ const NUM_INPUTS = 5 + NUM_SENSORS;
 
 const NO_GATE_REWARD = -0.1;
 const GATE_REWARD = 100;
-const DEATH_REWARD = -1000;
+const DEATH_REWARD = -100;
 
 var car = null;
 
@@ -101,7 +101,11 @@ export class Car {
         this.move();
         this.updateSensors();
         let reward = this.checkReward();
-        this.checkAlive();
+        let alive = this.checkAlive();
+
+        if (!alive) {
+            return [this.alive, DEATH_REWARD, false]
+        }
 
         if ( reward > 0 ) {
             return [this.alive, reward, true];
@@ -184,24 +188,18 @@ export class Car {
     }
 
     trainOnReplayBatch( batchSize, gamma, optimizer ) {
-        // Get a batch of examples from the replay buffer.
         const batch = this.replayMemory.sample( batchSize );
         const lossFunction = () => tf.tidy( () => {
             const stateTensor = Car.getStatesTensors( batch.map( example => example[0] ) );
 
-            const actionTensor = tf.tensor1d(
-                batch.map( example => example[1] ), 'int32' );
-            const qs = this.onlineNetwork.apply( stateTensor, {training: true} )
-                .mul( tf.oneHot( actionTensor, NUM_ACTIONS ) ).sum( -1 );
+            const actionTensor = tf.tensor1d( batch.map( example => example[1] ), 'int32' );
+            const qs = this.onlineNetwork.apply( stateTensor, {training: true} ).mul( tf.oneHot( actionTensor, NUM_ACTIONS ) ).sum( -1 );
 
             const rewardTensor = tf.tensor1d( batch.map( example => example[2] ) );
             const nextStateTensor = Car.getStatesTensors( batch.map( example => example[4] ) );
-            const nextMaxQTensor =
-                this.targetNetwork.predict( nextStateTensor ).max( -1 );
-            const doneMask = tf.scalar( 1 ).sub(
-                tf.tensor1d( batch.map( example => example[3] ) ).asType( 'float32' ) );
-            const targetQs =
-                rewardTensor.add( nextMaxQTensor.mul( doneMask ).mul( gamma ) );
+            const nextMaxQTensor = this.targetNetwork.predict( nextStateTensor ).max( -1 );
+            const doneMask = tf.scalar( 1 ).sub( tf.tensor1d( batch.map( example => example[3] ) ).asType( 'float32' ) );
+            const targetQs = rewardTensor.add( nextMaxQTensor.mul( doneMask ).mul( gamma ) );
             return tf.losses.meanSquaredError( targetQs, qs );
         } );
 
@@ -211,7 +209,6 @@ export class Car {
         // Use the gradients to update the online DQN's weights.
         optimizer.applyGradients( grads.grads );
         tf.dispose( grads );
-        // TODO(cais): Return the loss value here?
     }
 
     getState() {
