@@ -1,7 +1,4 @@
-import * as fs from 'fs';
-
 import * as argparse from 'argparse';
-import {mkdir} from 'shelljs';
 
 // The value of tf (TensorFlow.js-Node module) will be set dynamically
 // depending on the value of the --gpu flag below.
@@ -83,7 +80,7 @@ export async function train(
             if ( averageReward100 > averageReward100Best ) {
                 copyWeights( agent.targetNetwork, agent.onlineNetwork );
                 console.log( 'Sync\'ed weights from online network to target network' );
-                
+
                 averageReward100Best = averageReward100;
                 let date = now.toLocaleTimeString('it-IT');
                 if ( savePath != null ) {

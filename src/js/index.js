@@ -4,14 +4,15 @@ import {Canvas} from './canvas';
 import {Car} from './car';
 import {Game} from './game';
 import {Map} from './map';
+import {ALL_ACTIONS} from './car';
 
 window.global = window;
 window.Buffer = window.Buffer || require( 'buffer' ).Buffer;
 
+/* Load cars */
 let fileData, base64Image, image;
 let extension = 'png';
 
-/* Load cars */
 let carImages = [];
 fileData = fs.readFileSync( 'src/img/car-0.png' );
 base64Image = new Buffer.from( fileData, 'binary' ).toString( 'base64' );
@@ -43,13 +44,7 @@ image = new Image();
 image.src = `data:image/${extension.split( '.' ).pop()};base64,${base64Image}`;
 carImages.push( image );
 
-const canvas = new Canvas( 'car-canvas', carImages, Map.default() );
-var car = Car.default();
-
-const gameCanvas = document.getElementById( 'game-canvas' );
-
 const loadHostedModelButton = document.getElementById( 'load-hosted-model' );
-
 const stepButton = document.getElementById( 'step' );
 const resetButton = document.getElementById( 'reset' );
 const autoPlayStopButton = document.getElementById( 'auto-play-stop' );
@@ -72,7 +67,12 @@ showRewardsCheckbox.addEventListener( 'click', () => {
 
 let game;
 let qNet;
+let currentQValues;
+let bestAction;
 
+const LOCAL_MODEL_URL = 'dqn/model.json';
+const canvas = new Canvas( 'car-canvas', carImages, Map.default() );
+var car = Car.default();
 let cumulativeReward = 0;
 let cumulativeGates = 0;
 let autoPlaying = false;
@@ -128,11 +128,6 @@ async function step() {
     game.drawCar( car, showRewardsCheckbox.checked, showSensorsCheckbox.checked );
 }
 
-let currentQValues;
-let bestAction;
-
-import {ALL_ACTIONS} from './car';
-
 /** Calculate the current Q-values and the best action. */
 async function calcQValuesAndBestAction() {
     if ( currentQValues != null ) {
@@ -150,8 +145,6 @@ function invalidateQValuesAndBestAction() {
     currentQValues = null;
     bestAction = null;
 }
-
-const LOCAL_MODEL_URL = 'dqn/model.json';
 
 function enableGameButtons() {
     autoPlayStopButton.disabled = false;
