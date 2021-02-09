@@ -81,6 +81,9 @@ export async function train(
             let now = new Date(Date.now()); 
 
             if ( averageReward100 > averageReward100Best ) {
+                copyWeights( agent.targetNetwork, agent.onlineNetwork );
+                console.log( 'Sync\'ed weights from online network to target network' );
+                
                 averageReward100Best = averageReward100;
                 let date = now.toLocaleTimeString('it-IT');
                 if ( savePath != null ) {
@@ -97,10 +100,6 @@ export async function train(
                     console.log( `Saved DQN to ${savePath}-timed-` + date );
                 }
             }
-        }
-        if ( agent.frameCount % syncEveryFrames === 0 ) {
-            copyWeights( agent.targetNetwork, agent.onlineNetwork );
-            console.log( 'Sync\'ed weights from online network to target network' );
         }
     }
 }
