@@ -43,15 +43,6 @@ image = new Image();
 image.src = `data:image/${extension.split( '.' ).pop()};base64,${base64Image}`;
 carImages.push( image );
 
-/* Load tracks */
-let trackImages = [];
-
-fileData = fs.readFileSync( 'src/img/track-0.png' );
-base64Image = new Buffer.from( fileData, 'binary' ).toString( 'base64' );
-image = new Image();
-image.src = `data:image/${extension.split( '.' ).pop()};base64,${base64Image}`;
-trackImages.push( image );
-
 const canvas = new Canvas( 'car-canvas', carImages, Map.default() );
 var car = Car.default();
 
