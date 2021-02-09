@@ -1,4 +1,7 @@
 # Autonomous Car using Tensorflow JS Reinforcement Learning
+
+![](https://i.imgur.com/OfOOGx9.png)
+
 Autonomous car in the browser, built with JS and Tensorflow. The preview uses an HTML Canvas.
 
 A Reinforcement learning algorithm is used to train a model, which can drive a car around a given track.
